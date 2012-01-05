@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -60,7 +61,20 @@ namespace XecretsSystray
             {
                 WebResponse resp = req.GetResponse();
                 string response = new System.IO.StreamReader(resp.GetResponseStream(), Encoding.UTF8).ReadToEnd();
-                Console.Out.WriteLine(response);
+                response = response.Replace(",", ",\n");
+                // Console.Out.WriteLine(response);
+                
+                var jsonDecoder = new System.Web.Script.Serialization.JavaScriptSerializer();
+                var tcl = jsonDecoder.Deserialize<Dictionary<string, object>>(response);
+                System.Collections.ArrayList items = (System.Collections.ArrayList)tcl["TCL"];
+
+                Console.Out.WriteLine("Deserialized {0} items.", items.Count);
+                foreach (var item in items)
+                {
+                    Dictionary<string, object> values = (Dictionary<string, object>)item;
+                    string title = values["T"].ToString();
+                    Console.Out.WriteLine(title);
+                }
             }
             catch (WebException exception)
             {
