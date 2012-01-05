@@ -6,7 +6,7 @@
 * DONE Get list of secrets
 * DONE Display search field
 * DONE Update visible secrets as user types
-* TODO Provide "Copy" button
+* DONE Provide "Copy" button
 * Validating the certificate provided by the server?
 
 - How to HTTP Basic in .Net?

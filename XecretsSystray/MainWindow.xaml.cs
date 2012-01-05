@@ -185,5 +185,13 @@ namespace XecretsSystray
                 m_resultListView.SelectedItem = m_resultListView.Items[0];
             }
         }
+
+        private void m_resultListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && m_resultListView.SelectedItem != null)
+            {
+                FetchSecret((Secret)m_resultListView.SelectedItem);
+            }
+        }
     }
 }
