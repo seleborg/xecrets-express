@@ -2,11 +2,11 @@
 * DONE Create console output facility
 * DONE Get credentials from file
 * DONE Authenticate with server
-* JSON
-* Get list of secrets
-* Display search field
-* Update visible secrets as user types
-* Provide "Copy" button
+* DONE JSON
+* DONE Get list of secrets
+* DONE Display search field
+* DONE Update visible secrets as user types
+* TODO Provide "Copy" button
 * Validating the certificate provided by the server?
 
 - How to HTTP Basic in .Net?
