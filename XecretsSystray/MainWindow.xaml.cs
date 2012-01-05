@@ -160,7 +160,7 @@ namespace XecretsSystray
                 string response = new System.IO.StreamReader(resp.GetResponseStream(), Encoding.UTF8).ReadToEnd();
 
                 var secretString = DeserializeSecret(response);
-                Console.Out.WriteLine("Downloaded secret: {0}", secretString);
+                Clipboard.SetText(secretString);
             }
             catch (WebException exception)
             {
