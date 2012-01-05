@@ -176,5 +176,14 @@ namespace XecretsSystray
             string secret = (string)sec["X"];
             return secret;
         }
+
+        private void m_searchField_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Down && m_resultListView.HasItems)
+            {
+                m_resultListView.Focus();
+                m_resultListView.SelectedItem = m_resultListView.Items[0];
+            }
+        }
     }
 }
