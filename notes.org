@@ -1,8 +1,7 @@
-* Install Visual Studio Express
-* Taskbar icon
-* Get credentials from file
-* Authenticate with server
-
+* DONE Install Visual Studio Express
+* DONE Create console output facility
+* DONE Get credentials from file
+* DONE Authenticate with server
 * JSON
 * Get list of secrets
 * Display search field
@@ -12,6 +11,7 @@
 
 - How to HTTP Basic in .Net?
 - Keep credentials in file on disc (don't commit!)
+* Taskbar icon
 * Notes about xecrets-tna
 - How to base64 in .Net?
 
