@@ -25,6 +25,7 @@ namespace XecretsSystray
         private string m_passphraseBase64;
         private string m_serviceUrl = "https://www.axantum.com/Xecrets/RestApi.ashx";
         private List<Secret> m_secrets = new List<Secret>();
+        private string m_filter;
 
         public MainWindow()
         {
@@ -92,6 +93,34 @@ namespace XecretsSystray
             }
 
             return secrets;
+        }
+
+
+        private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox box = (TextBox)sender;
+            m_filter = box.Text;
+            FilterResults();
+        }
+
+        
+        private void FilterResults()
+        {
+            if (m_filter.Length == 0)
+            {
+                m_resultListView.ItemsSource = null;
+            }
+            else
+            {
+                m_resultListView.ItemsSource = m_secrets;
+                string searchString = m_searchField.Text.ToLower();
+                m_resultListView.Items.Filter = delegate(object untypedSecret)
+                {
+                    var secret = (Secret)untypedSecret;
+                    return secret.m_title.ToLower().Contains(searchString)
+                        || secret.m_content.ToLower().Contains(searchString);
+                };
+            }
         }
     }
 }
