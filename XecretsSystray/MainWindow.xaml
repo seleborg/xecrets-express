@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <TextBox Height="23" Margin="12,12,12,0" Name="m_searchField" VerticalAlignment="Top" TextChanged="textBox1_TextChanged" Text="" />
-        <ListView Margin="12,41,12,12" Name="m_resultListView" />
+        <TextBox Height="33" Margin="12,12,12,0" Name="m_searchField" VerticalAlignment="Top" TextChanged="textBox1_TextChanged" Text="Search" FontSize="18" FontWeight="Normal" />
+        <ListView Margin="12,51,12,12" Name="m_resultListView" FontSize="15" AllowDrop="False" BorderThickness="0" MouseDoubleClick="m_resultListView_MouseDoubleClick" />
     </Grid>
 </Window>

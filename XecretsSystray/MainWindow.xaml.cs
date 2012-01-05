@@ -25,13 +25,17 @@ namespace XecretsSystray
         private string m_passphraseBase64;
         private string m_serviceUrl = "https://www.axantum.com/Xecrets/RestApi.ashx";
         private List<Secret> m_secrets = new List<Secret>();
+        private bool m_searchFieldShowsPrompt = true;
         private string m_filter;
 
         public MainWindow()
         {
             InitializeComponent();
+            m_searchField.SelectAll();
+            m_searchField.Focus();
             ReadCredentials();
             m_secrets = DownloadListOfSecrets();
+            m_searchFieldShowsPrompt = false;
         }
 
 
@@ -55,9 +59,7 @@ namespace XecretsSystray
 
         private List<Secret> DownloadListOfSecrets()
         {
-            WebRequest req = HttpWebRequest.Create(m_serviceUrl + "/list");
-            req.Headers["Authorization"] = 
-                "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(m_username + ":" + m_passphraseBase64));
+            WebRequest req = CreateApiRequest("/list");
 
             try
             {
@@ -73,6 +75,15 @@ namespace XecretsSystray
                 Console.Out.WriteLine("Error: {0}", exception.Message);
                 return new List<Secret>();
             }
+        }
+
+
+        private WebRequest CreateApiRequest(string call)
+        {
+            WebRequest req = HttpWebRequest.Create(m_serviceUrl + call);
+            req.Headers["Authorization"] =
+                "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(m_username + ":" + m_passphraseBase64));
+            return req;
         }
 
 
@@ -98,6 +109,11 @@ namespace XecretsSystray
 
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (m_searchFieldShowsPrompt)
+            {
+                return;
+            }
+
             TextBox box = (TextBox)sender;
             m_filter = box.Text;
             FilterResults();
@@ -121,6 +137,44 @@ namespace XecretsSystray
                         || secret.m_content.ToLower().Contains(searchString);
                 };
             }
+        }
+
+        private void m_resultListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            FetchSecret((Secret)m_resultListView.SelectedItem);
+        }
+
+        private void FetchSecret(Secret secret)
+        {
+            if (secret == null)
+            {
+                return;
+            }
+
+            Console.Out.WriteLine("Fetching secret for '{0}'...", secret);
+            WebRequest req = CreateApiRequest("/secret/" + secret.m_guid.ToUpper());
+
+            try
+            {
+                WebResponse resp = req.GetResponse();
+                string response = new System.IO.StreamReader(resp.GetResponseStream(), Encoding.UTF8).ReadToEnd();
+
+                var secretString = DeserializeSecret(response);
+                Console.Out.WriteLine("Downloaded secret: {0}", secretString);
+            }
+            catch (WebException exception)
+            {
+                Console.Out.WriteLine("Error: {0}", exception.Message);
+            }
+        }
+
+        private string DeserializeSecret(string response)
+        {
+            var jsonDecoder = new System.Web.Script.Serialization.JavaScriptSerializer();
+            var sec = jsonDecoder.Deserialize<Dictionary<string, object>>(response);
+
+            string secret = (string)sec["X"];
+            return secret;
         }
     }
 }
