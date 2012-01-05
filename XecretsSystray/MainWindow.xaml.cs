@@ -114,9 +114,9 @@ namespace XecretsSystray
             {
                 m_resultListView.ItemsSource = m_secrets;
                 string searchString = m_searchField.Text.ToLower();
-                m_resultListView.Items.Filter = delegate(object untypedSecret)
+                m_resultListView.Items.Filter = (s)=>
                 {
-                    var secret = (Secret)untypedSecret;
+                    var secret = (Secret)s;
                     return secret.m_title.ToLower().Contains(searchString)
                         || secret.m_content.ToLower().Contains(searchString);
                 };
