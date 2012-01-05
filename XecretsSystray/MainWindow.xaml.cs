@@ -24,12 +24,13 @@ namespace XecretsSystray
         private string m_username;
         private string m_passphraseBase64;
         private string m_serviceUrl = "https://www.axantum.com/Xecrets/RestApi.ashx";
+        private List<Secret> m_secrets = new List<Secret>();
 
         public MainWindow()
         {
             InitializeComponent();
             ReadCredentials();
-            PrintListOfSecrets();
+            m_secrets = DownloadListOfSecrets();
         }
 
 
@@ -51,7 +52,7 @@ namespace XecretsSystray
         }
 
 
-        private void PrintListOfSecrets()
+        private List<Secret> DownloadListOfSecrets()
         {
             WebRequest req = HttpWebRequest.Create(m_serviceUrl + "/list");
             req.Headers["Authorization"] = 
@@ -61,25 +62,36 @@ namespace XecretsSystray
             {
                 WebResponse resp = req.GetResponse();
                 string response = new System.IO.StreamReader(resp.GetResponseStream(), Encoding.UTF8).ReadToEnd();
-                response = response.Replace(",", ",\n");
-                // Console.Out.WriteLine(response);
-                
-                var jsonDecoder = new System.Web.Script.Serialization.JavaScriptSerializer();
-                var tcl = jsonDecoder.Deserialize<Dictionary<string, object>>(response);
-                System.Collections.ArrayList items = (System.Collections.ArrayList)tcl["TCL"];
 
-                Console.Out.WriteLine("Deserialized {0} items.", items.Count);
-                foreach (var item in items)
-                {
-                    Dictionary<string, object> values = (Dictionary<string, object>)item;
-                    string title = values["T"].ToString();
-                    Console.Out.WriteLine(title);
-                }
+                var secrets = DeserializeListOfSecrets(response);
+                Console.Out.WriteLine("Downloaded {0} secrets.", secrets.Count);
+                return secrets;
             }
             catch (WebException exception)
             {
                 Console.Out.WriteLine("Error: {0}", exception.Message);
+                return new List<Secret>();
             }
+        }
+
+
+        private List<Secret> DeserializeListOfSecrets(string response)
+        {
+            var jsonDecoder = new System.Web.Script.Serialization.JavaScriptSerializer();
+            var tcl = jsonDecoder.Deserialize<Dictionary<string, object>>(response);
+            System.Collections.ArrayList items = (System.Collections.ArrayList)tcl["TCL"];
+
+            var secrets = new List<Secret>();
+            foreach (var item in items)
+            {
+                Dictionary<string, object> values = (Dictionary<string, object>)item;
+                string title = values["T"].ToString();
+                string content = values["C"].ToString();
+                string guid = values["G"].ToString();
+                secrets.Add(new Secret(title, content, guid));
+            }
+
+            return secrets;
         }
     }
 }
