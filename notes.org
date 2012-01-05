@@ -1,0 +1,35 @@
+* Install Visual Studio Express
+* Taskbar icon
+* Get credentials from file
+* Authenticate with server
+
+* JSON
+* Get list of secrets
+* Display search field
+* Update visible secrets as user types
+* Provide "Copy" button
+* Validating the certificate provided by the server?
+
+- How to HTTP Basic in .Net?
+- Keep credentials in file on disc (don't commit!)
+* Notes about xecrets-tna
+- How to base64 in .Net?
+
+using System;
+using System.Text;
+
+string inputText = "This is some text.";
+Console.Out.WriteLine ("Input text: {0}", inputText);
+byte [] bytesToEncode = Encoding.UTF8.GetBytes (inputText);
+
+string encodedText = Convert.ToBase64String (bytesToEncode);
+Console.Out.WriteLine ("Encoded text: {0}", encodedText);
+
+byte [] decodedBytes = Convert.FromBase64String (encodedText);
+string decodedText = Encoding.UTF8.GetString (decodedBytes);
+Console.Out.WriteLine ("Decoded text: {0}", decodedText);
+
+- Authentication:
+
+Input password -> UTF8 -> Base64
+
