@@ -44,7 +44,7 @@ namespace XecretsSystray
             m_username = "carl.seleborg@gmail.com";
             
             System.IO.FileStream stream = new System.IO.FileStream(
-                "C:\\Users\\Carl\\passphrase.txt", System.IO.FileMode.Open);
+                "C:\\Temp\\passphrase.txt", System.IO.FileMode.Open);
 
             byte[] passphraseBytesUtf8 = new byte[stream.Length];
             stream.Read(passphraseBytesUtf8, 0, (int)stream.Length);
