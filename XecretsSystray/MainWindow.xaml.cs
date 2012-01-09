@@ -177,9 +177,17 @@ namespace XecretsSystray
             return secret;
         }
 
-        private void m_searchField_KeyUp(object sender, KeyEventArgs e)
+        private void m_searchField_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Down && m_resultListView.HasItems)
+            if (e.Key == Key.Down)
+            {
+                MoveFocusToFirstItemInList();
+            }
+        }
+
+        private void MoveFocusToFirstItemInList()
+        {
+            if (m_resultListView.HasItems)
             {
                 m_resultListView.Focus();
                 m_resultListView.SelectedItem = m_resultListView.Items[0];
