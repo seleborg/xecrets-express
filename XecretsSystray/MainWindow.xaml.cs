@@ -201,5 +201,10 @@ namespace XecretsSystray
                 FetchSecret((Secret)m_resultListView.SelectedItem);
             }
         }
+
+        private void image1_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+
+        }
     }
 }

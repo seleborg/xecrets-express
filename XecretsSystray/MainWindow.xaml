@@ -1,9 +1,10 @@
 ﻿<Window x:Class="XecretsSystray.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Xecrets" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="488" Width="547">
     <Grid>
-        <TextBox Height="33" Margin="12,12,12,0" Name="m_searchField" VerticalAlignment="Top" TextChanged="textBox1_TextChanged" Text="Search" FontSize="18" FontWeight="Normal" PreviewKeyDown="m_searchField_PreviewKeyDown" />
-        <ListView Margin="12,51,12,12" Name="m_resultListView" FontSize="15" AllowDrop="False" BorderThickness="0" MouseDoubleClick="m_resultListView_MouseDoubleClick" KeyDown="m_resultListView_KeyDown" />
+        <TextBox Height="33" Margin="12,150,12,0" Name="m_searchField" VerticalAlignment="Top" TextChanged="textBox1_TextChanged" Text="Search" FontSize="18" FontWeight="Normal" PreviewKeyDown="m_searchField_PreviewKeyDown" />
+        <ListView Margin="12,189,12,12" Name="m_resultListView" FontSize="15" AllowDrop="False" BorderThickness="0" MouseDoubleClick="m_resultListView_MouseDoubleClick" KeyDown="m_resultListView_KeyDown" />
+        <Image Height="144" Name="image1" Stretch="UniformToFill" VerticalAlignment="Top" ImageFailed="image1_ImageFailed" Source="/XecretsSystray;component/Resources/XecretsSystrayBanner.png" MinWidth="525" />
     </Grid>
 </Window>
