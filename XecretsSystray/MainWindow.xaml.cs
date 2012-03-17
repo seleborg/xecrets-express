@@ -50,10 +50,7 @@ namespace XecretsSystray
             stream.Read(passphraseBytesUtf8, 0, (int)stream.Length);
             string passphraseString = Encoding.UTF8.GetString(passphraseBytesUtf8).Trim();
 
-            Console.Out.WriteLine("'{0}'", passphraseString);
             m_passphraseBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(passphraseString));
-
-            Console.Out.WriteLine("Username = {0}, Passphrase = {1}", m_username, m_passphraseBase64);
         }
 
 
