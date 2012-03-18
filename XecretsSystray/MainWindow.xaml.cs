@@ -152,7 +152,7 @@ namespace XecretsSystray
             }
 
             Console.Out.WriteLine("Fetching secret for '{0}'...", secret);
-            WebRequest req = CreateApiRequest("/secret/" + secret.m_guid.ToUpper());
+            WebRequest req = CreateApiRequest("/secret/" + secret.m_guid);
 
             try
             {
