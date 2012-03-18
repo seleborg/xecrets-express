@@ -31,6 +31,9 @@ namespace XecretsSystray
         public MainWindow()
         {
             InitializeComponent();
+
+            this.KeyDown += new KeyEventHandler(OnKeyDown);
+
             m_searchField.SelectAll();
             m_searchField.Focus();
             ReadCredentials();
@@ -191,13 +194,28 @@ namespace XecretsSystray
             }
         }
 
-        private void m_resultListView_KeyDown(object sender, KeyEventArgs e)
+        private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && m_resultListView.SelectedItem != null)
+            switch (e.Key)
             {
-                FetchSecret((Secret)m_resultListView.SelectedItem);
+                case Key.Enter:
+                    if (m_resultListView.SelectedItem != null)
+                    {
+                        FetchSecret((Secret)m_resultListView.SelectedItem);
+                    }
+                    break;
+
+                case Key.Space:
+                    if (m_resultListView.IsFocused)
+                    {
+                        m_details.IsSelected = true;
+                    }
+                    break;
+
+                case Key.Escape:
+                    m_list.IsSelected = true;
+                    break;
             }
         }
-
     }
 }
