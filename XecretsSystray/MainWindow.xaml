@@ -9,7 +9,6 @@
                 <Grid>
                     <TextBox Height="34" Name="m_searchField" VerticalAlignment="Top" TextChanged="textBox1_TextChanged" Text="Search" FontSize="18" FontWeight="Normal" PreviewKeyDown="m_searchField_PreviewKeyDown" Padding="1" BorderThickness="1" BorderBrush="Silver" OverridesDefaultStyle="False" />
                     <ListView AllowDrop="False" BorderThickness="0" FontSize="15" Margin="0,40,0,0" Name="m_resultListView" />
-                    <ScrollViewer Height="23" HorizontalAlignment="Left" Margin="383,232,0,0" Name="scrollViewer1" VerticalAlignment="Top" Width="120" />
                 </Grid>
             </TabItem>
             <TabItem Name="m_details" Header="Details">
