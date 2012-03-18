@@ -33,12 +33,19 @@ namespace XecretsSystray
             InitializeComponent();
 
             this.KeyDown += new KeyEventHandler(OnKeyDown);
+            m_resultListView.PreviewKeyDown += new KeyEventHandler(m_resultListView_PreviewKeyDown);
+            m_searchField.GotKeyboardFocus += new KeyboardFocusChangedEventHandler(OnSearchFieldGotFocus);
 
             m_searchField.SelectAll();
             m_searchField.Focus();
             ReadCredentials();
             m_secrets = DownloadListOfSecrets();
             m_searchFieldShowsPrompt = false;
+        }
+
+        private void OnSearchFieldGotFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            m_searchField.SelectAll();
         }
 
 
@@ -196,8 +203,9 @@ namespace XecretsSystray
             }
         }
 
-        private void OnKeyDown(object sender, KeyEventArgs e)
+        private void m_resultListView_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            Console.Out.WriteLine("OnKeyDown from m_resultListView: {0}", e.ToString());
             switch (e.Key)
             {
                 case Key.Enter:
@@ -208,14 +216,28 @@ namespace XecretsSystray
                     break;
 
                 case Key.Space:
-                    if (m_resultListView.IsFocused)
+                    if (sender == m_resultListView)
                     {
                         ShowDetails((Secret)m_resultListView.SelectedItem);
                     }
                     break;
 
+                default:
+                    break;
+            }
+
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
                 case Key.Escape:
-                    m_list.IsSelected = true;
+                    m_tabs.SelectedIndex = 0;
+                    m_resultListView.Focus();
+                    break;
+
+                default:
                     break;
             }
         }
