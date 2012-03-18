@@ -7,11 +7,14 @@
 * DONE Display search field
 * DONE Update visible secrets as user types
 * DONE Provide "Copy" button
-* Validating the certificate provided by the server?
-
+* TODO Validating the certificate provided by the server?
+CertificateValidationPolicy
 - How to HTTP Basic in .Net?
 - Keep credentials in file on disc (don't commit!)
-* Taskbar icon
+* ESC closes window
+* SPACE shows details (escape or space to return to list)
+* Use keyring
+* NOT Taskbar icon
 * Notes about xecrets-tna
 - How to base64 in .Net?
 
@@ -32,4 +35,5 @@ Console.Out.WriteLine ("Decoded text: {0}", decodedText);
 - Authentication:
 
 Input password -> UTF8 -> Base64
+
 
