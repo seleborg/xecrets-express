@@ -141,14 +141,14 @@ namespace XecretsSystray
 
         private void m_resultListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            FetchSecret((Secret)m_resultListView.SelectedItem);
+            Clipboard.SetText(FetchSecret((Secret)m_resultListView.SelectedItem));
         }
 
-        private void FetchSecret(Secret secret)
+        private String FetchSecret(Secret secret)
         {
             if (secret == null)
             {
-                return;
+                return null;
             }
 
             Console.Out.WriteLine("Fetching secret for '{0}'...", secret);
@@ -160,12 +160,14 @@ namespace XecretsSystray
                 string response = new System.IO.StreamReader(resp.GetResponseStream(), Encoding.UTF8).ReadToEnd();
 
                 var secretString = DeserializeSecret(response);
-                Clipboard.SetText(secretString);
+                return secretString;
             }
             catch (WebException exception)
             {
                 Console.Out.WriteLine("Error: {0}", exception.Message);
             }
+
+            return null;
         }
 
         private string DeserializeSecret(string response)
@@ -208,7 +210,7 @@ namespace XecretsSystray
                 case Key.Space:
                     if (m_resultListView.IsFocused)
                     {
-                        m_details.IsSelected = true;
+                        ShowDetails((Secret)m_resultListView.SelectedItem);
                     }
                     break;
 
@@ -216,6 +218,15 @@ namespace XecretsSystray
                     m_list.IsSelected = true;
                     break;
             }
+        }
+
+        private void ShowDetails(Secret secret)
+        {
+            m_secretTitle.Text = secret.m_title;
+            m_secretDetails.Text = secret.m_content;
+            m_secretSecret.Text = FetchSecret(secret);
+            m_tabs.SelectedIndex = 1;
+            m_secretDetails.Focus();
         }
     }
 }

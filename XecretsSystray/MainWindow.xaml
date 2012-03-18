@@ -3,17 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Xecrets" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="488" Width="547" ResizeMode="NoResize" WindowStyle="ToolWindow">
     <Grid>
-        <Image Height="144" Name="image1" Stretch="UniformToFill" VerticalAlignment="Top" Source="/XecretsSystray;component/Resources/XecretsSystrayBanner.png" MinWidth="525" />
-        <TabControl Height="299" Margin="0,150,0,0" Name="m_tabs" VerticalAlignment="Top" TabStripPlacement="Bottom" BorderBrush="{x:Null}" BorderThickness="0">
-            <TabItem Name="m_list" Visibility="Visible" Focusable="False" IsTabStop="False" Header="List">
+       <Image Height="144" Name="image1" Stretch="UniformToFill" VerticalAlignment="Top" Source="/XecretsSystray;component/Resources/XecretsSystrayBanner.png" MinWidth="525" />
+        <TabControl Height="299" Margin="0,150,0,0" Name="m_tabs" VerticalAlignment="Top" TabStripPlacement="Bottom" BorderBrush="{x:Null}" BorderThickness="0" SelectedIndex="0">
+            <TabItem Name="m_list" Header="List">
                 <Grid>
                     <TextBox Height="34" Name="m_searchField" VerticalAlignment="Top" TextChanged="textBox1_TextChanged" Text="Search" FontSize="18" FontWeight="Normal" PreviewKeyDown="m_searchField_PreviewKeyDown" Padding="1" BorderThickness="1" BorderBrush="Silver" OverridesDefaultStyle="False" />
                     <ListView AllowDrop="False" BorderThickness="0" FontSize="15" Margin="0,40,0,0" Name="m_resultListView" />
+                    <ScrollViewer Height="23" HorizontalAlignment="Left" Margin="383,232,0,0" Name="scrollViewer1" VerticalAlignment="Top" Width="120" />
                 </Grid>
             </TabItem>
-            <TabItem Name="m_details" IsEnabled="True" Header="Details">
+            <TabItem Name="m_details" Header="Details">
                 <Grid>
-                    <WebBrowser Name="m_html" />
+                    <TextBox Height="36" Name="m_secretTitle" Text="TextBlock" VerticalAlignment="Top" Margin="6,6,6,0" Background="{x:Null}" FontSize="22" FontWeight="Bold" TextWrapping="Wrap" IsReadOnly="True" BorderBrush="{x:Null}" Padding="0" AllowDrop="False" AutoWordSelection="True" CaretBrush="Black" />
+                    <TextBox FontSize="18" Margin="6,48,6,42" Name="m_secretDetails" Text="TextBlock" IsReadOnly="True" TextWrapping="Wrap" BorderBrush="{x:Null}" Background="{x:Null}" Padding="0" AutoWordSelection="True" AllowDrop="False" VerticalScrollBarVisibility="Auto" CaretBrush="Black" />
+                    <TextBlock Height="30" HorizontalAlignment="Left" Margin="6,233,0,0" Name="textBlock1" Text="Secret:" VerticalAlignment="Top" Width="75" FontSize="18" />
+                    <TextBox Height="30" Margin="87,233,6,0" Name="m_secretSecret" Text="TextBlock" VerticalAlignment="Top" FontSize="18" Foreground="Red" IsReadOnly="True" TextWrapping="Wrap" BorderBrush="{x:Null}" Background="{x:Null}" Padding="0" AllowDrop="False" AutoWordSelection="True" Width="424" CaretBrush="Black" />
                 </Grid>
             </TabItem>
         </TabControl>
