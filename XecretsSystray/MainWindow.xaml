@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Xecrets" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="488" Width="547" ResizeMode="NoResize" WindowStyle="ToolWindow">
     <Grid>
-       <Image Height="144" Name="image1" Stretch="UniformToFill" VerticalAlignment="Top" Source="/XecretsSystray;component/Resources/XecretsSystrayBanner.png" MinWidth="525" />
+        <Image Height="144" Name="image1" Stretch="UniformToFill" VerticalAlignment="Top" Source="/XecretsSystray;component/Resources/XecretsSystrayBanner.png" MinWidth="525" />
         <TabControl Height="299" Margin="0,150,0,0" Name="m_tabs" VerticalAlignment="Top" TabStripPlacement="Bottom" BorderBrush="{x:Null}" BorderThickness="0" SelectedIndex="0">
             <TabItem Name="m_list" Header="List">
                 <Grid>
