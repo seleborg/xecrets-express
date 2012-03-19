@@ -30,24 +30,32 @@ namespace XecretsSystray
 
             this.KeyDown += new KeyEventHandler(OnKeyDown);
             m_resultListView.PreviewKeyDown += new KeyEventHandler(m_resultListView_PreviewKeyDown);
-            m_searchField.GotKeyboardFocus += new KeyboardFocusChangedEventHandler(OnSearchFieldGotFocus);
+            m_searchField.GotKeyboardFocus += new KeyboardFocusChangedEventHandler(m_searchField_GetKeyboardFocus);
             m_searchField.TextChanged += new TextChangedEventHandler(m_searchField_TextChanged);
             m_searchField.PreviewKeyDown += new KeyEventHandler(m_searchField_PreviewKeyDown);
 
-            m_searchField.SelectAll();
-            m_searchField.Focus();
             m_secrets = m_xecrets.DownloadListOfSecrets();
+            MoveFocusToSearchField();
             m_searchFieldShowsPrompt = false;
         }
 
-        private void OnSearchFieldGotFocus(object sender, KeyboardFocusChangedEventArgs e)
+        
+        private void MoveFocusToSearchField()
+        {
+            m_searchField.Focus();
+        }
+
+
+        private void m_searchField_GetKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             m_searchField.SelectAll();
+            e.Handled = true;
         }
 
 
         private void m_searchField_TextChanged(object sender, TextChangedEventArgs e)
         {
+            e.Handled = true;
             if (m_searchFieldShowsPrompt)
             {
                 return;
@@ -78,27 +86,34 @@ namespace XecretsSystray
             }
         }
 
+
         private void m_resultListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Clipboard.SetText(m_xecrets.FetchSecret((Secret)m_resultListView.SelectedItem));
+            e.Handled = true;
         }
+
 
         private void m_searchField_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Down)
             {
                 MoveFocusToFirstItemInList();
+                e.Handled = true;
             }
         }
 
+        
         private void MoveFocusToFirstItemInList()
         {
             if (m_resultListView.HasItems)
             {
-                m_resultListView.Focus();
                 m_resultListView.SelectedItem = m_resultListView.Items[0];
+                m_resultListView.Focus();
+                m_resultListView.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
             }
         }
+
 
         private void m_resultListView_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -108,13 +123,23 @@ namespace XecretsSystray
                     if (m_resultListView.SelectedItem != null)
                     {
                         m_xecrets.FetchSecret((Secret)m_resultListView.SelectedItem);
+                        e.Handled = true;
                     }
                     break;
 
                 case Key.Space:
-                    if (sender == m_resultListView && m_resultListView.SelectedItem != null)
+                    if (m_resultListView.SelectedItem != null)
                     {
                         ShowDetails((Secret)m_resultListView.SelectedItem);
+                        e.Handled = true;
+                    }
+                    break;
+
+                case Key.Up:
+                    if (m_resultListView.SelectedIndex == 0)
+                    {
+                        MoveFocusToSearchField();
+                        e.Handled = true;
                     }
                     break;
 
@@ -124,6 +149,7 @@ namespace XecretsSystray
 
         }
 
+        
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
@@ -131,13 +157,17 @@ namespace XecretsSystray
                 case Key.Escape:
                     m_detailsBox.Visibility = Visibility.Hidden;
                     m_searchBox.Visibility = Visibility.Visible;
+                    //MoveFocusToFirstItemInList();
                     m_resultListView.Focus();
+                    m_resultListView.MoveFocus(new TraversalRequest(FocusNavigationDirection.Right));
+                    e.Handled = true;
                     break;
 
                 default:
                     break;
             }
         }
+
 
         private void ShowDetails(Secret secret)
         {
