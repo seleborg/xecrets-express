@@ -155,12 +155,20 @@ namespace XecretsSystray
             switch (e.Key)
             {
                 case Key.Escape:
-                    m_detailsBox.Visibility = Visibility.Hidden;
-                    m_searchBox.Visibility = Visibility.Visible;
-                    //MoveFocusToFirstItemInList();
-                    m_resultListView.Focus();
-                    m_resultListView.MoveFocus(new TraversalRequest(FocusNavigationDirection.Right));
-                    e.Handled = true;
+                    if (m_detailsBox.IsVisible)
+                    {
+                        m_detailsBox.Visibility = Visibility.Hidden;
+                        m_searchBox.Visibility = Visibility.Visible;
+                        //MoveFocusToFirstItemInList();
+                        m_resultListView.Focus();
+                        m_resultListView.MoveFocus(new TraversalRequest(FocusNavigationDirection.Right));
+                        e.Handled = true;
+                    }
+                    else if (m_searchBox.IsVisible)
+                    {
+                        this.Close();
+                        e.Handled = true;
+                    }
                     break;
 
                 default:
