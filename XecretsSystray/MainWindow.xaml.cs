@@ -155,16 +155,12 @@ namespace XecretsSystray
             switch (e.Key)
             {
                 case Key.Escape:
-                    if (m_detailsBox.IsVisible)
+                    if (m_detailsPanel.IsVisible)
                     {
-                        m_detailsBox.Visibility = Visibility.Hidden;
-                        m_searchBox.Visibility = Visibility.Visible;
-                        //MoveFocusToFirstItemInList();
-                        m_resultListView.Focus();
-                        m_resultListView.MoveFocus(new TraversalRequest(FocusNavigationDirection.Right));
+                        ShowSearchPanel();
                         e.Handled = true;
                     }
-                    else if (m_searchBox.IsVisible)
+                    else if (m_searchPanel.IsVisible)
                     {
                         this.Close();
                         e.Handled = true;
@@ -177,13 +173,22 @@ namespace XecretsSystray
         }
 
 
+        private void ShowSearchPanel()
+        {
+            m_detailsPanel.Visibility = Visibility.Hidden;
+            m_searchPanel.Visibility = Visibility.Visible;
+            m_resultListView.Focus();
+            m_resultListView.MoveFocus(new TraversalRequest(FocusNavigationDirection.Right));
+        }
+
+
         private void ShowDetails(Secret secret)
         {
             m_secretTitle.Text = secret.m_title;
             m_secretDetails.Text = secret.m_content;
             m_secretSecret.Text = m_xecrets.FetchSecret(secret);
-            m_detailsBox.Visibility = Visibility.Visible;
-            m_searchBox.Visibility = Visibility.Hidden;
+            m_detailsPanel.Visibility = Visibility.Visible;
+            m_searchPanel.Visibility = Visibility.Hidden;
             m_secretDetails.Focus();
         }
     }

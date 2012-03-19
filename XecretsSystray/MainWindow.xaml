@@ -4,13 +4,13 @@
         Title="Xecrets" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="488" Width="547" ResizeMode="NoResize" WindowStyle="ToolWindow">
     <Grid>
         <Image Height="144" Name="image1" Stretch="UniformToFill" VerticalAlignment="Top" Source="/XecretsSystray;component/Resources/XecretsSystrayBanner.png" MinWidth="525" />
-        <GroupBox Name="m_searchBox" BorderBrush="{x:Null}" Margin="0,150,0,0">
+        <GroupBox Name="m_searchPanel" BorderBrush="{x:Null}" Margin="0,150,0,0">
             <Grid>
                 <TextBox Name="m_searchField" BorderBrush="Silver" BorderThickness="1" FontSize="18" FontWeight="Normal" Height="33" OverridesDefaultStyle="False" Padding="1" Text="Search" VerticalAlignment="Top" Margin="0,6,0,0" />
                 <ListView Name="m_resultListView" AllowDrop="False" BorderThickness="0" FontSize="15" Margin="0,45,0,0" />
             </Grid>
         </GroupBox>
-        <GroupBox Height="299" Margin="0,150,0,0" Name="m_detailsBox" VerticalAlignment="Top" Visibility="Collapsed" Background="#FFFCD8D8">
+        <GroupBox Height="299" Margin="0,150,0,0" Name="m_detailsPanel" VerticalAlignment="Top" Visibility="Collapsed" Background="#FFFCD8D8">
             <Grid>
                 <TextBox AllowDrop="False" AutoWordSelection="True" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="Black" FontSize="22" FontWeight="Bold" Height="41" IsReadOnly="True" Name="m_secretTitle" Padding="0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Top" Margin="0,6,0,0" />
                 <TextBox AllowDrop="False" AutoWordSelection="True" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="Black" FontSize="18" IsReadOnly="True" Margin="1,53,0,42" Name="m_secretDetails" Padding="0" Text="TextBlock" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
