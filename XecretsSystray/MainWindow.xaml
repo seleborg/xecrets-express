@@ -4,21 +4,19 @@
         Title="Xecrets" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="488" Width="547" ResizeMode="NoResize" WindowStyle="ToolWindow">
     <Grid>
         <Image Height="144" Name="image1" Stretch="UniformToFill" VerticalAlignment="Top" Source="/XecretsSystray;component/Resources/XecretsSystrayBanner.png" MinWidth="525" />
-        <TabControl Height="299" Margin="0,150,0,0" Name="m_tabs" VerticalAlignment="Top" TabStripPlacement="Bottom" BorderBrush="{x:Null}" BorderThickness="0" SelectedIndex="0">
-            <TabItem Name="m_list" Header="List">
-                <Grid>
-                    <TextBox Height="34" Name="m_searchField" VerticalAlignment="Top" TextChanged="textBox1_TextChanged" Text="Search" FontSize="18" FontWeight="Normal" PreviewKeyDown="m_searchField_PreviewKeyDown" Padding="1" BorderThickness="1" BorderBrush="Silver" OverridesDefaultStyle="False" />
-                    <ListView AllowDrop="False" BorderThickness="0" FontSize="15" Margin="0,40,0,0" Name="m_resultListView" />
-                </Grid>
-            </TabItem>
-            <TabItem Name="m_details" Header="Details">
-                <Grid>
-                    <TextBox Height="36" Name="m_secretTitle" Text="TextBlock" VerticalAlignment="Top" Margin="6,6,6,0" Background="{x:Null}" FontSize="22" FontWeight="Bold" TextWrapping="Wrap" IsReadOnly="True" BorderBrush="{x:Null}" Padding="0" AllowDrop="False" AutoWordSelection="True" CaretBrush="Black" />
-                    <TextBox FontSize="18" Margin="6,48,6,42" Name="m_secretDetails" Text="TextBlock" IsReadOnly="True" TextWrapping="Wrap" BorderBrush="{x:Null}" Background="{x:Null}" Padding="0" AutoWordSelection="True" AllowDrop="False" VerticalScrollBarVisibility="Auto" CaretBrush="Black" />
-                    <TextBlock Height="30" HorizontalAlignment="Left" Margin="6,233,0,0" Name="textBlock1" Text="Secret:" VerticalAlignment="Top" Width="75" FontSize="18" />
-                    <TextBox Height="30" Margin="87,233,6,0" Name="m_secretSecret" Text="TextBlock" VerticalAlignment="Top" FontSize="18" Foreground="Red" IsReadOnly="True" TextWrapping="Wrap" BorderBrush="{x:Null}" Background="{x:Null}" Padding="0" AllowDrop="False" AutoWordSelection="True" Width="424" CaretBrush="Black" />
-                </Grid>
-            </TabItem>
-        </TabControl>
+        <GroupBox Name="m_searchBox" BorderBrush="{x:Null}" Margin="0,150,0,0">
+            <Grid>
+                <TextBox Name="m_searchField" BorderBrush="Silver" BorderThickness="1" FontSize="18" FontWeight="Normal" Height="33" OverridesDefaultStyle="False" Padding="1" Text="Search" VerticalAlignment="Top" Margin="0,6,0,0" />
+                <ListView Name="m_resultListView" AllowDrop="False" BorderThickness="0" FontSize="15" Margin="0,45,0,0" />
+            </Grid>
+        </GroupBox>
+        <GroupBox Height="299" Margin="0,150,0,0" Name="m_detailsBox" VerticalAlignment="Top" Visibility="Collapsed" Background="#FFFCD8D8">
+            <Grid>
+                <TextBox AllowDrop="False" AutoWordSelection="True" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="Black" FontSize="22" FontWeight="Bold" Height="41" IsReadOnly="True" Name="m_secretTitle" Padding="0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Top" Margin="0,6,0,0" />
+                <TextBox AllowDrop="False" AutoWordSelection="True" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="Black" FontSize="18" IsReadOnly="True" Margin="1,53,0,42" Name="m_secretDetails" Padding="0" Text="TextBlock" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
+                <TextBlock FontSize="18" Height="30" HorizontalAlignment="Left" Margin="4,265,0,0" Name="textBlock1" Text="Secret:" VerticalAlignment="Top" Width="75" />
+                <TextBox AllowDrop="False" AutoWordSelection="True" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="Black" FontSize="18" Foreground="Red" Height="30" IsReadOnly="True" Margin="85,265,0,0" Name="m_secretSecret" Padding="0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Top" />
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>

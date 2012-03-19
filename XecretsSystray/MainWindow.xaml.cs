@@ -31,6 +31,8 @@ namespace XecretsSystray
             this.KeyDown += new KeyEventHandler(OnKeyDown);
             m_resultListView.PreviewKeyDown += new KeyEventHandler(m_resultListView_PreviewKeyDown);
             m_searchField.GotKeyboardFocus += new KeyboardFocusChangedEventHandler(OnSearchFieldGotFocus);
+            m_searchField.TextChanged += new TextChangedEventHandler(m_searchField_TextChanged);
+            m_searchField.PreviewKeyDown += new KeyEventHandler(m_searchField_PreviewKeyDown);
 
             m_searchField.SelectAll();
             m_searchField.Focus();
@@ -44,7 +46,7 @@ namespace XecretsSystray
         }
 
 
-        private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
+        private void m_searchField_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (m_searchFieldShowsPrompt)
             {
@@ -100,7 +102,6 @@ namespace XecretsSystray
 
         private void m_resultListView_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            Console.Out.WriteLine("OnKeyDown from m_resultListView: {0}", e.ToString());
             switch (e.Key)
             {
                 case Key.Enter:
@@ -128,7 +129,8 @@ namespace XecretsSystray
             switch (e.Key)
             {
                 case Key.Escape:
-                    m_tabs.SelectedIndex = 0;
+                    m_detailsBox.Visibility = Visibility.Hidden;
+                    m_searchBox.Visibility = Visibility.Visible;
                     m_resultListView.Focus();
                     break;
 
@@ -142,7 +144,8 @@ namespace XecretsSystray
             m_secretTitle.Text = secret.m_title;
             m_secretDetails.Text = secret.m_content;
             m_secretSecret.Text = m_xecrets.FetchSecret(secret);
-            m_tabs.SelectedIndex = 1;
+            m_detailsBox.Visibility = Visibility.Visible;
+            m_searchBox.Visibility = Visibility.Hidden;
             m_secretDetails.Focus();
         }
     }
