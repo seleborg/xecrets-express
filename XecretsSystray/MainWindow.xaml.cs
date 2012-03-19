@@ -111,7 +111,7 @@ namespace XecretsSystray
                     break;
 
                 case Key.Space:
-                    if (sender == m_resultListView)
+                    if (sender == m_resultListView && m_resultListView.SelectedItem != null)
                     {
                         ShowDetails((Secret)m_resultListView.SelectedItem);
                     }
