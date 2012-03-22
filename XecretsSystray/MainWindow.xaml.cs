@@ -30,6 +30,8 @@ namespace XecretsSystray
 
             this.KeyDown += new KeyEventHandler(OnKeyDown);
             m_resultListView.PreviewKeyDown += new KeyEventHandler(m_resultListView_PreviewKeyDown);
+            m_resultListView.MouseDoubleClick +=new MouseButtonEventHandler(m_resultListView_MouseDoubleClick);
+            
             m_searchField.GotKeyboardFocus += new KeyboardFocusChangedEventHandler(m_searchField_GetKeyboardFocus);
             m_searchField.TextChanged += new TextChangedEventHandler(m_searchField_TextChanged);
             m_searchField.PreviewKeyDown += new KeyEventHandler(m_searchField_PreviewKeyDown);
@@ -89,7 +91,7 @@ namespace XecretsSystray
 
         private void m_resultListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Clipboard.SetText(m_xecrets.FetchSecret((Secret)m_resultListView.SelectedItem));
+            CopySelectedSecretToClipboard();
             e.Handled = true;
         }
 
@@ -120,11 +122,8 @@ namespace XecretsSystray
             switch (e.Key)
             {
                 case Key.Enter:
-                    if (m_resultListView.SelectedItem != null)
-                    {
-                        m_xecrets.FetchSecret((Secret)m_resultListView.SelectedItem);
-                        e.Handled = true;
-                    }
+                    CopySelectedSecretToClipboard();
+                    e.Handled = true;
                     break;
 
                 case Key.Space:
@@ -169,6 +168,16 @@ namespace XecretsSystray
 
                 default:
                     break;
+            }
+        }
+
+
+        private void CopySelectedSecretToClipboard()
+        {
+            if (m_resultListView.SelectedItem != null)
+            {
+                Clipboard.SetText(
+                    m_xecrets.FetchSecret((Secret)m_resultListView.SelectedItem));
             }
         }
 
