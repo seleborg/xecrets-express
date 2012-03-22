@@ -37,6 +37,8 @@ namespace XecretsSystray
             m_secrets = m_xecrets.DownloadListOfSecrets();
             MoveFocusToSearchField();
             m_searchFieldShowsPrompt = false;
+            WindowsCredentials credentials = new WindowsCredentials();
+            credentials.LoadOrPrompt(this);
         }
 
         
