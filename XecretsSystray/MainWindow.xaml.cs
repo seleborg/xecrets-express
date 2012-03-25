@@ -29,24 +29,28 @@ namespace XecretsSystray
             InitializeComponent();
 
             this.KeyDown += new KeyEventHandler(OnKeyDown);
+            this.ContentRendered += new EventHandler(MainWindow_ContentRendered);
+
             m_resultListView.PreviewKeyDown += new KeyEventHandler(m_resultListView_PreviewKeyDown);
             m_searchField.GotKeyboardFocus += new KeyboardFocusChangedEventHandler(m_searchField_GetKeyboardFocus);
             m_searchField.TextChanged += new TextChangedEventHandler(m_searchField_TextChanged);
             m_searchField.PreviewKeyDown += new KeyEventHandler(m_searchField_PreviewKeyDown);
-
-            m_secrets = m_xecrets.DownloadListOfSecrets();
-            MoveFocusToSearchField();
-            m_searchFieldShowsPrompt = false;
-            WindowsCredentials credentials = new WindowsCredentials();
-            credentials.LoadOrPrompt(this);
         }
 
-        
-        private void MoveFocusToSearchField()
+        void MainWindow_ContentRendered(object sender, EventArgs e)
         {
-            m_searchField.Focus();
+            WindowsCredentials credentials = WindowsCredentials.LoadOrPrompt(this);
+            if (credentials != null)
+            {
+                m_secrets = m_xecrets.DownloadListOfSecrets();
+                MoveFocusToSearchField();
+                m_searchFieldShowsPrompt = false;
+            }
+            else
+            {
+                Application.Current.Shutdown();
+            }
         }
-
 
         private void m_searchField_GetKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
@@ -172,6 +176,12 @@ namespace XecretsSystray
                 default:
                     break;
             }
+        }
+
+
+        private void MoveFocusToSearchField()
+        {
+            m_searchField.Focus();
         }
 
 

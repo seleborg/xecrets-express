@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using System.Windows;
 using System.Windows.Interop;
@@ -12,19 +14,32 @@ namespace XecretsSystray
 {
     class WindowsCredentials
     {
-        public void LoadOrPrompt(System.Windows.Window mainWindow)
+        private String m_username;
+        private SecureString m_password = new SecureString();
+
+        public static WindowsCredentials LoadOrPrompt(System.Windows.Window mainWindow)
         {
-            Prompt(mainWindow);
+            WindowsCredentials cred = new WindowsCredentials();
+
+            if (cred.Prompt(mainWindow))
+            {
+                return cred;
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        private void Prompt(System.Windows.Window mainWindow)
+
+        private bool Prompt(System.Windows.Window mainWindow)
         {
             using (Kerr.PromptForCredential dialog = new Kerr.PromptForCredential())
             {
-                dialog.Title = "Title";
-                dialog.Message = "Message";
+                dialog.Title = "Xecrets";
+                dialog.Message = "Please sign in to Xecrets to download your list of secrets:";
                 //dialog.Banner = Images.Banner;
-                dialog.UserName = "initial user name";
+                dialog.UserName = "me@mail.com";
 
                 dialog.DoNotPersist = true;
                 dialog.ShowSaveCheckBox = true;
@@ -34,11 +49,33 @@ namespace XecretsSystray
 
                 if (DialogResult.OK == dialog.ShowDialog(parent))
                 {
-                    // Use credentials wisely...
+                    m_username = dialog.UserName;
+                    m_password = dialog.Password;
+                    m_password.MakeReadOnly();
+
+                    String peek = SecureStringToString(m_password);
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
         }
 
+
+        public String Username
+        {
+            get { return m_username; }
+        }
+
+
+        public String Password
+        {
+            get { return SecureStringToString(m_password); }
+        }
+
+        
         private class OldWindow : System.Windows.Forms.IWin32Window
         {
             private readonly System.IntPtr _handle;
@@ -49,6 +86,21 @@ namespace XecretsSystray
             System.IntPtr System.Windows.Forms.IWin32Window.Handle
             {
                 get { return _handle; }
+            }
+        }
+
+
+        public static String SecureStringToString(SecureString value)
+        {
+            IntPtr bstr = Marshal.SecureStringToBSTR(value);
+
+            try
+            {
+                return Marshal.PtrToStringBSTR(bstr);
+            }
+            finally
+            {
+                Marshal.FreeBSTR(bstr);
             }
         }
     }
