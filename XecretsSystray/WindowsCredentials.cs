@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using Kerr;
 
 namespace XecretsSystray
@@ -15,7 +14,7 @@ namespace XecretsSystray
     class WindowsCredentials
     {
         private String m_username;
-        private SecureString m_password = new SecureString();
+        private SecureString m_password;
 
         public static WindowsCredentials LoadOrPrompt(System.Windows.Window mainWindow)
         {
@@ -50,10 +49,9 @@ namespace XecretsSystray
                 if (DialogResult.OK == dialog.ShowDialog(parent))
                 {
                     m_username = dialog.UserName;
-                    m_password = dialog.Password;
+                    m_password = dialog.Password.Copy();
                     m_password.MakeReadOnly();
 
-                    String peek = SecureStringToString(m_password);
                     return true;
                 }
                 else
@@ -70,9 +68,9 @@ namespace XecretsSystray
         }
 
 
-        public String Password
+        public SecureString Password
         {
-            get { return SecureStringToString(m_password); }
+            get { return m_password; }
         }
 
         
@@ -86,21 +84,6 @@ namespace XecretsSystray
             System.IntPtr System.Windows.Forms.IWin32Window.Handle
             {
                 get { return _handle; }
-            }
-        }
-
-
-        public static String SecureStringToString(SecureString value)
-        {
-            IntPtr bstr = Marshal.SecureStringToBSTR(value);
-
-            try
-            {
-                return Marshal.PtrToStringBSTR(bstr);
-            }
-            finally
-            {
-                Marshal.FreeBSTR(bstr);
             }
         }
     }

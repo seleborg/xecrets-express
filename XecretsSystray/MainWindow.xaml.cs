@@ -21,7 +21,7 @@ namespace XecretsSystray
     {
         private bool m_searchFieldShowsPrompt = true;
         private string m_filter;
-        private Xecrets m_xecrets = new Xecrets();
+        private Xecrets m_xecrets = null;
         private List<Secret> m_secrets = new List<Secret>();
 
         public MainWindow()
@@ -37,20 +37,41 @@ namespace XecretsSystray
             m_searchField.PreviewKeyDown += new KeyEventHandler(m_searchField_PreviewKeyDown);
         }
 
-        void MainWindow_ContentRendered(object sender, EventArgs e)
+
+        private void MainWindow_ContentRendered(object sender, EventArgs e)
         {
-            WindowsCredentials credentials = WindowsCredentials.LoadOrPrompt(this);
-            if (credentials != null)
-            {
-                m_secrets = m_xecrets.DownloadListOfSecrets();
-                MoveFocusToSearchField();
-                m_searchFieldShowsPrompt = false;
-            }
-            else
-            {
-                Application.Current.Shutdown();
-            }
+            AuthenticateAndFetchSecrets();
         }
+
+
+        private void AuthenticateAndFetchSecrets()
+        {
+            do
+            {
+                WindowsCredentials credentials = WindowsCredentials.LoadOrPrompt(this);
+                if (credentials != null)
+                {
+                    try
+                    {
+                        m_xecrets = new Xecrets(credentials.Username, credentials.Password);
+                        m_secrets = m_xecrets.DownloadListOfSecrets();
+                        MoveFocusToSearchField();
+                        m_searchFieldShowsPrompt = false;
+                    }
+                    catch (Exception e)
+                    {
+                        m_xecrets = null;
+                        MessageBox.Show(e.Message);
+                    }
+                }
+                else
+                {
+                    Application.Current.Shutdown();
+                    return;
+                }
+            } while (m_xecrets == null);
+        }
+
 
         private void m_searchField_GetKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {

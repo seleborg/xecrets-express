@@ -13,10 +13,12 @@ CertificateValidationPolicy
 - Keep credentials in file on disc (don't commit!)
 * DONE ESC closes window
 * DONE SPACE shows details (escape or space to return to list)
-* TODO Enter to copy password is BROKEN
+* DONE Enter to copy password is BROKEN
 * TODO Use keyring
 http://www.microsoft.com/indonesia/msdn/credmgmt.aspx
+* TODO Escape does not seem to exit the app
 * TODO NOT Taskbar icon
+* TODO Strong-name sign the Kerr.Credentials assembly?
 * Notes about xecrets-tna
 - How to base64 in .Net?
 
