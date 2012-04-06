@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using System.Web.Script.Serialization;
+
 
 namespace XecretsSystray
 {
@@ -13,45 +16,38 @@ namespace XecretsSystray
         private string m_passphraseBase64;
         private string m_serviceUrl = "https://www.axantum.com/Xecrets/RestApi.ashx";
 
-        public Xecrets()
+        public Xecrets(String username, SecureString password)
         {
-            ReadCredentials();
+            m_username = username;
+            m_passphraseBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(SecureStringToString(password).Trim()));
         }
 
 
-        private void ReadCredentials()
+        private static String SecureStringToString(SecureString value)
         {
-            m_username = "carl.seleborg@gmail.com";
+            IntPtr bstr = Marshal.SecureStringToBSTR(value);
 
-            System.IO.FileStream stream = new System.IO.FileStream(
-                "C:\\Temp\\passphrase.txt", System.IO.FileMode.Open);
-
-            byte[] passphraseBytesUtf8 = new byte[stream.Length];
-            stream.Read(passphraseBytesUtf8, 0, (int)stream.Length);
-            string passphraseString = Encoding.UTF8.GetString(passphraseBytesUtf8).Trim();
-
-            m_passphraseBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(passphraseString));
+            try
+            {
+                return Marshal.PtrToStringBSTR(bstr);
+            }
+            finally
+            {
+                Marshal.FreeBSTR(bstr);
+            }
         }
 
-
+        
         public List<Secret> DownloadListOfSecrets()
         {
             WebRequest req = CreateApiRequest("/list");
 
-            try
-            {
-                WebResponse resp = req.GetResponse();
-                string response = new System.IO.StreamReader(resp.GetResponseStream(), Encoding.UTF8).ReadToEnd();
+            WebResponse resp = req.GetResponse();
+            string response = new System.IO.StreamReader(resp.GetResponseStream(), Encoding.UTF8).ReadToEnd();
 
-                var secrets = DeserializeListOfSecrets(response);
-                Console.Out.WriteLine("Downloaded {0} secrets.", secrets.Count);
-                return secrets;
-            }
-            catch (WebException exception)
-            {
-                Console.Out.WriteLine("Error: {0}", exception.Message);
-                return new List<Secret>();
-            }
+            var secrets = DeserializeListOfSecrets(response);
+            Console.Out.WriteLine("Downloaded {0} secrets.", secrets.Count);
+            return secrets;
         }
 
 

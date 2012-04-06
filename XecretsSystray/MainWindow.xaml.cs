@@ -21,7 +21,7 @@ namespace XecretsSystray
     {
         private bool m_searchFieldShowsPrompt = true;
         private string m_filter;
-        private Xecrets m_xecrets = new Xecrets();
+        private Xecrets m_xecrets = null;
         private List<Secret> m_secrets = new List<Secret>();
 
         public MainWindow()
@@ -29,22 +29,59 @@ namespace XecretsSystray
             InitializeComponent();
 
             this.KeyDown += new KeyEventHandler(OnKeyDown);
+            this.ContentRendered += new EventHandler(MainWindow_ContentRendered);
+
             m_resultListView.PreviewKeyDown += new KeyEventHandler(m_resultListView_PreviewKeyDown);
             m_resultListView.MouseDoubleClick +=new MouseButtonEventHandler(m_resultListView_MouseDoubleClick);
             
             m_searchField.GotKeyboardFocus += new KeyboardFocusChangedEventHandler(m_searchField_GetKeyboardFocus);
             m_searchField.TextChanged += new TextChangedEventHandler(m_searchField_TextChanged);
             m_searchField.PreviewKeyDown += new KeyEventHandler(m_searchField_PreviewKeyDown);
-
-            m_secrets = m_xecrets.DownloadListOfSecrets();
-            MoveFocusToSearchField();
-            m_searchFieldShowsPrompt = false;
         }
 
-        
-        private void MoveFocusToSearchField()
+
+        private void MainWindow_ContentRendered(object sender, EventArgs e)
         {
-            m_searchField.Focus();
+            AuthenticateAndFetchSecrets();
+        }
+
+
+        private void AuthenticateAndFetchSecrets()
+        {
+            WindowsCredentials credentials = WindowsCredentials.LoadOrPrompt(this);
+
+            if (credentials == null)
+            {
+                Application.Current.Shutdown();
+                return;
+            }
+
+            do
+            {
+                try
+                {
+                    m_xecrets = new Xecrets(credentials.Username, credentials.Password);
+                    m_secrets = m_xecrets.DownloadListOfSecrets();
+                    credentials.ConfirmThatCredentialsAreValid();
+
+                    m_searchField.Text = "Search";
+                    m_searchField.IsReadOnly = false;
+                    MoveFocusToSearchField();
+                    m_searchFieldShowsPrompt = false;
+                    break;
+                }
+                catch (Exception e)
+                {
+                    m_xecrets = null;
+                    MessageBox.Show(e.Message);
+                }
+
+                if (!credentials.PromptAgain(this, true))
+                {
+                    break;
+                }
+
+            } while (m_xecrets == null);
         }
 
 
@@ -188,6 +225,12 @@ namespace XecretsSystray
             m_searchPanel.Visibility = Visibility.Visible;
             m_resultListView.Focus();
             m_resultListView.MoveFocus(new TraversalRequest(FocusNavigationDirection.Right));
+        }
+
+
+        private void MoveFocusToSearchField()
+        {
+            m_searchField.Focus();
         }
 
 
