@@ -60,6 +60,7 @@ namespace XecretsSystray
                 {
                     m_xecrets = new Xecrets(credentials.Username, credentials.Password);
                     m_secrets = m_xecrets.DownloadListOfSecrets();
+                    credentials.ConfirmThatCredentialsAreValid();
 
                     m_searchField.Text = "Search";
                     m_searchField.IsReadOnly = false;

@@ -15,6 +15,7 @@ namespace XecretsSystray
     {
         private String m_username;
         private SecureString m_password;
+        private Kerr.PromptForCredential m_dialog = new Kerr.PromptForCredential();
 
         public static WindowsCredentials LoadOrPrompt(System.Windows.Window mainWindow)
         {
@@ -31,6 +32,19 @@ namespace XecretsSystray
         }
 
 
+        private WindowsCredentials()
+        {
+            m_dialog.Title = "Xecrets";
+            m_dialog.Message = "Please sign in to Xecrets to download your list of secrets:";
+            m_dialog.TargetName = "Xecrets";
+
+            m_dialog.DoNotPersist = false;
+            m_dialog.ShowSaveCheckBox = true;
+            m_dialog.GenericCredentials = true;
+            m_dialog.ExpectConfirmation = true;
+        }
+
+
         public bool PromptAgain(System.Windows.Window mainWindow, bool passwordWasInvalid)
         {
             return Prompt(mainWindow, true);
@@ -39,43 +53,26 @@ namespace XecretsSystray
 
         private bool Prompt(System.Windows.Window mainWindow, bool reprompt)
         {
-            using (Kerr.PromptForCredential dialog = new Kerr.PromptForCredential())
+            if (reprompt)
             {
-                dialog.Title = "Xecrets";
-                dialog.Message = "Please sign in to Xecrets to download your list of secrets:";
-                dialog.TargetName = "Xecrets";
+                m_dialog.IncorrectPassword = true;
+                m_dialog.AlwaysShowUI = true;
+            }
 
-                dialog.DoNotPersist = false;
-                dialog.ShowSaveCheckBox = true;
-                dialog.GenericCredentials = true;
-                dialog.ExpectConfirmation = true;
+            WindowInteropHelper helper = new WindowInteropHelper(mainWindow);
+            System.Windows.Forms.IWin32Window parent = new OldWindow(helper.Handle);
 
-                if (reprompt)
-                {
-                    dialog.IncorrectPassword = true;
-                    dialog.AlwaysShowUI = true;
-                }
+            if (DialogResult.OK == m_dialog.ShowDialog(parent))
+            {
+                m_username = m_dialog.UserName;
+                m_password = m_dialog.Password.Copy();
+                m_password.MakeReadOnly();
 
-                WindowInteropHelper helper = new WindowInteropHelper(mainWindow);
-                System.Windows.Forms.IWin32Window parent = new OldWindow(helper.Handle);
-
-                if (DialogResult.OK == dialog.ShowDialog(parent))
-                {
-                    if (dialog.SaveChecked)
-                    {
-                        dialog.ConfirmCredentials();
-                    }
-
-                    m_username = dialog.UserName;
-                    m_password = dialog.Password.Copy();
-                    m_password.MakeReadOnly();
-
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -89,6 +86,15 @@ namespace XecretsSystray
         public SecureString Password
         {
             get { return m_password; }
+        }
+
+
+        public void ConfirmThatCredentialsAreValid()
+        {
+            if (m_dialog.SaveChecked)
+            {
+                m_dialog.ConfirmCredentials();
+            }
         }
 
         
