@@ -20,7 +20,7 @@ namespace XecretsSystray
         {
             WindowsCredentials cred = new WindowsCredentials();
 
-            if (cred.Prompt(mainWindow))
+            if (cred.Prompt(mainWindow, false))
             {
                 return cred;
             }
@@ -31,23 +31,41 @@ namespace XecretsSystray
         }
 
 
-        private bool Prompt(System.Windows.Window mainWindow)
+        public bool PromptAgain(System.Windows.Window mainWindow, bool passwordWasInvalid)
+        {
+            return Prompt(mainWindow, true);
+        }
+
+
+        private bool Prompt(System.Windows.Window mainWindow, bool reprompt)
         {
             using (Kerr.PromptForCredential dialog = new Kerr.PromptForCredential())
             {
                 dialog.Title = "Xecrets";
                 dialog.Message = "Please sign in to Xecrets to download your list of secrets:";
-                //dialog.Banner = Images.Banner;
-                dialog.UserName = "me@mail.com";
+                dialog.TargetName = "Xecrets";
 
-                dialog.DoNotPersist = true;
+                dialog.DoNotPersist = false;
                 dialog.ShowSaveCheckBox = true;
+                dialog.GenericCredentials = true;
+                dialog.ExpectConfirmation = true;
+
+                if (reprompt)
+                {
+                    dialog.IncorrectPassword = true;
+                    dialog.AlwaysShowUI = true;
+                }
 
                 WindowInteropHelper helper = new WindowInteropHelper(mainWindow);
                 System.Windows.Forms.IWin32Window parent = new OldWindow(helper.Handle);
 
                 if (DialogResult.OK == dialog.ShowDialog(parent))
                 {
+                    if (dialog.SaveChecked)
+                    {
+                        dialog.ConfirmCredentials();
+                    }
+
                     m_username = dialog.UserName;
                     m_password = dialog.Password.Copy();
                     m_password.MakeReadOnly();

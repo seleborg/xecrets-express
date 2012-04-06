@@ -6,7 +6,7 @@
         <Image Height="144" Name="image1" Stretch="UniformToFill" VerticalAlignment="Top" Source="/XecretsSystray;component/Resources/XecretsSystrayBanner.png" MinWidth="525" />
         <GroupBox Name="m_searchPanel" BorderBrush="{x:Null}" Margin="0,150,0,0" BorderThickness="0">
             <Grid>
-                <TextBox Name="m_searchField" BorderBrush="Silver" BorderThickness="1" FontSize="22" FontWeight="Bold" Height="46" OverridesDefaultStyle="False" Padding="3" Text="Search" VerticalAlignment="Top" Margin="0,6,0,0" Background="WhiteSmoke" IsTabStop="True" FontStretch="Normal" Foreground="#FF353535" />
+                <TextBox Name="m_searchField" BorderBrush="Silver" BorderThickness="1" FontSize="22" FontWeight="Bold" Height="46" OverridesDefaultStyle="False" Padding="3" Text="Fetching secrets..." VerticalAlignment="Top" Margin="0,6,0,0" Background="WhiteSmoke" IsTabStop="True" FontStretch="Normal" Foreground="#FF353535" IsReadOnly="True" />
                 <ListView Name="m_resultListView" AllowDrop="False" BorderThickness="1" FontSize="18" Margin="0,58,0,0" Background="WhiteSmoke" Padding="3" IsTabStop="False" />
             </Grid>
         </GroupBox>

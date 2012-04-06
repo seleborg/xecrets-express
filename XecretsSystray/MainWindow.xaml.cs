@@ -46,29 +46,38 @@ namespace XecretsSystray
 
         private void AuthenticateAndFetchSecrets()
         {
+            WindowsCredentials credentials = WindowsCredentials.LoadOrPrompt(this);
+
+            if (credentials == null)
+            {
+                Application.Current.Shutdown();
+                return;
+            }
+
             do
             {
-                WindowsCredentials credentials = WindowsCredentials.LoadOrPrompt(this);
-                if (credentials != null)
+                try
                 {
-                    try
-                    {
-                        m_xecrets = new Xecrets(credentials.Username, credentials.Password);
-                        m_secrets = m_xecrets.DownloadListOfSecrets();
-                        MoveFocusToSearchField();
-                        m_searchFieldShowsPrompt = false;
-                    }
-                    catch (Exception e)
-                    {
-                        m_xecrets = null;
-                        MessageBox.Show(e.Message);
-                    }
+                    m_xecrets = new Xecrets(credentials.Username, credentials.Password);
+                    m_secrets = m_xecrets.DownloadListOfSecrets();
+
+                    m_searchField.Text = "Search";
+                    m_searchField.IsReadOnly = false;
+                    MoveFocusToSearchField();
+                    m_searchFieldShowsPrompt = false;
+                    break;
                 }
-                else
+                catch (Exception e)
                 {
-                    Application.Current.Shutdown();
-                    return;
+                    m_xecrets = null;
+                    MessageBox.Show(e.Message);
                 }
+
+                if (!credentials.PromptAgain(this, true))
+                {
+                    break;
+                }
+
             } while (m_xecrets == null);
         }
 
