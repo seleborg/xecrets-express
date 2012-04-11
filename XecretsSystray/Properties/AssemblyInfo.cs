@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("XecretsSystray")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Carl Seleborg")]
 [assembly: AssemblyProduct("XecretsSystray")]
-[assembly: AssemblyCopyright("Copyright ©  2012")]
+[assembly: AssemblyCopyright("Copyright © Carl Seleborg 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
